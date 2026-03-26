@@ -9,19 +9,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Клонирование
-      uses: actions/checkout@v3
+      - name: Клонирование
+        uses: actions/checkout@v3
 
-    - name: Установка Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.10"
+      - name: Установка Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
 
-    - name: Установка зависимостей
-      run: |
-        pip install flask pymongo bcrypt pytest
+      - name: Установка зависимостей
+        run: |
+          pip install flask pymongo bcrypt pytest
 
-    - name: Запуск тестов
-      run: |
-        export PYTHONPATH=$PYTHONPATH:$(pwd)
-        pytest
+      - name: Запуск сервера Flask
+        run: |
+          export FLASK_APP=app.py
+          export FLASK_ENV=development
+          nohup flask run --host=0.0.0.0 --port=5000 &
+          sleep 5  # даем серверу время подняться
+
+      - name: Запуск тестов
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)
+          pytest
