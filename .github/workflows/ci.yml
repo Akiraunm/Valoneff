@@ -1,13 +1,13 @@
+name: Python CI
+
+on:
+  push:
+  pull_request:
+
 jobs:
   test:
     runs-on: ubuntu-latest
-    services:
-      mongodb:
-        image: mongo:6.0
-        ports:
-          - 27017:27017
-        options: >-
-          --bind_ip_all
+
     steps:
     - name: Клонирование
       uses: actions/checkout@v3
@@ -25,21 +25,3 @@ jobs:
       run: |
         export PYTHONPATH=$PYTHONPATH:$(pwd)
         pytest
-import pytest
-import mongomock
-
-@pytest.fixture(autouse=True)
-def mock_db(monkeypatch):
-    client = mongomock.MongoClient()
-    db = client["test_db"]
-    
-    import app 
-    monkeypatch.setattr(app, "users", db["users"])
-def test_register(mock_db):
-    import app
-
-    app.users.insert_one({"username": "test", "password": "123"})
-
-    user = app.users.find_one({"username": "test"})
-    assert user is not None
-    assert user["username"] == "test"
