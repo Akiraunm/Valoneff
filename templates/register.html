@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+
+    <style>
+        body {
+            background: #0f172a;
+            color: white;
+            font-family: Arial;
+            margin: 0;
+        }
+
+        header {
+            background-color: #020617;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .menu button {
+            margin-left: 10px;
+            padding: 8px 15px;
+            background: #1e293b;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        .menu button:hover {
+            background: #334155;
+        }
+
+        .active {
+            background: #38bdf8;
+            color: black;
+        }
+
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 70px);
+        }
+
+        .box {
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 12px;
+            width: 300px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .btn {
+            margin-top: 15px;
+            width: 100%;
+            padding: 10px;
+            background: #38bdf8;
+            border: none;
+            color: black;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #0ea5e9;
+        }
+
+        .msg {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">🎮 Valoneff</div>
+
+    <div class="menu">
+        <button onclick="goHome()">Home</button>
+        <button onclick="goLogin()">Login</button>
+        <button class="active">Register</button>
+    </div>
+</header>
+
+<div class="center">
+    <div class="box">
+        <h2>Регистрация</h2>
+
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+
+        <button class="btn" onclick="register()">Зарегистрироваться</button>
+
+        <div class="msg" id="msg"></div>
+    </div>
+</div>
+
+<script>
+
+// 🔁 переходы
+function goHome() {
+    window.location.href = "/";
+}
+
+function goLogin() {
+    window.location.href = "/login-page";
+}
+
+// 🔐 регистрация
+function register() {
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("password").value;
+
+    fetch("/register", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            email: email,
+            password: password
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("msg").innerText = data.message || data.error;
+    });
+}
+
+</script>
+
+</body>
+</html>
