@@ -1,13 +1,13 @@
-name: Python CI
-
-on:
-  push:
-  pull_request:
-
 jobs:
   test:
     runs-on: ubuntu-latest
-
+    services:
+      mongodb:
+        image: mongo:6.0
+        ports:
+          - 27017:27017
+        options: >-
+          --bind_ip_all
     steps:
     - name: Клонирование
       uses: actions/checkout@v3
